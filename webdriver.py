@@ -213,3 +213,86 @@ class Router(object):
             Command.MINIMIZE_WINDOW:
                 ('POST', '/session/$sessionId/window/minimize')
         }
+    def execute(self, command, params):
+        """
+        Send a command to the remote server.
+        Any path subtitutions required for the URL mapped to the command should be
+        included in the command parameters.
+        :Args:
+         - command - A string specifying the command to execute.
+         - params - A dictionary of named parameters to send with the command as
+           its JSON payload.
+        """
+        command_info = self._commands[command]
+        assert command_info is not None, 'Unrecognised command %s' % command
+        path = string.Template(command_info[1]).substitute(params)
+        if hasattr(self, 'w3c') and self.w3c and isinstance(params, dict) and 'sessionId' in params:
+            del params['sessionId']
+        data = utils.dump_json(params)
+        url = '%s%s' % (self._url, path)
+        return self._request(command_info[0], url, body=data)
+
+    def _request(self, method, url, body=None):
+        """
+        Send an HTTP request to the remote server.
+        :Args:
+         - method - A string for the HTTP method to send the request with.
+         - url - A string for the URL to send the request to.
+         - body - A string for request body. Ignored unless method is POST or PUT.
+        :Returns:
+          A dictionary with the server's parsed JSON response.
+        """
+        LOGGER.debug('%s %s %s' % (method, url, body))
+
+        parsed_url = parse.urlparse(url)
+        headers = self.get_remote_connection_headers(parsed_url, self.keep_alive)
+        resp = None
+        if body and method != 'POST' and method != 'PUT':
+            body = None
+
+        if self.keep_alive:
+            resp = self._conn.request(method, url, body=body, headers=headers)
+
+            statuscode = resp.status
+        else:
+            http = urllib3.PoolManager(timeout=self._timeout)
+            resp = http.request(method, url, body=body, headers=headers)
+
+            statuscode = resp.status
+            if not hasattr(resp, 'getheader'):
+                if hasattr(resp.headers, 'getheader'):
+                    resp.getheader = lambda x: resp.headers.getheader(x)
+                elif hasattr(resp.headers, 'get'):
+                    resp.getheader = lambda x: resp.headers.get(x)
+
+        data = resp.data.decode('UTF-8')
+        try:
+            if 300 <= statuscode < 304:
+                return self._request('GET', resp.getheader('location'))
+            if 399 < statuscode <= 500:
+                return {'status': statuscode, 'value': data}
+            content_type = []
+            if resp.getheader('Content-Type') is not None:
+                content_type = resp.getheader('Content-Type').split(';')
+            if not any([x.startswith('image/png') for x in content_type]):
+
+                try:
+                    data = utils.load_json(data.strip())
+                except ValueError:
+                    if 199 < statuscode < 300:
+                        status = ErrorCode.SUCCESS
+                    else:
+                        status = ErrorCode.UNKNOWN_ERROR
+                    return {'status': status, 'value': data.strip()}
+
+                # Some of the drivers incorrectly return a response
+                # with no 'value' field when they should return null.
+                if 'value' not in data:
+                    data['value'] = None
+                return data
+            else:
+                data = {'status': 0, 'value': data}
+                return data
+        finally:
+            LOGGER.debug("Finished Request")
+            resp.close()
