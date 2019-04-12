@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: python-webdriver
+Version: 0
+Summary: Python client for Appium
+Home-page: UNKNOWN
+Author: Sam Lee
+License: Apache 2.0
+Description: In progress
+Keywords: appium,selenium,selenium 3,python client,mobile automation
+Platform: UNKNOWN
+Description-Content-Type: text/markdown

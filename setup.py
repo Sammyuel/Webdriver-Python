@@ -13,10 +13,18 @@
 # limitations under the License.
 import io
 import os
+from distutils.core import setup
+from setuptools import setup
 
+def library_version():
+    """
+    Return a version of this python library
+    """
+
+    return 0
 
 setup(
-    name='Python-client',
+    name='python_webdriver',
     version=library_version(),
     description='Python client for Appium',
     long_description=io.open(os.path.join(os.path.dirname('__file__'), 'README.md'), encoding='utf-8').read(),
@@ -30,9 +38,11 @@ setup(
     ],
     author='Sam Lee',
 
-    url='http://appium.io/',
     packages=[
         'core',
+        'core.appium',
+        
+
     ],
     license='Apache 2.0',
     classifiers=[

@@ -1,0 +1,12 @@
+README.md
+setup.py
+core/__init__.py
+core/device.py
+core/page.py
+core/appium/__init__.py
+core/appium/appium_connection.py
+core/appium/webdriver.py
+python_webdriver.egg-info/PKG-INFO
+python_webdriver.egg-info/SOURCES.txt
+python_webdriver.egg-info/dependency_links.txt
+python_webdriver.egg-info/top_level.txt

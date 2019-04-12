@@ -1,6 +1,7 @@
-from core.page import PageFactory 
+from python_webdriver.core.page import PageFactory 
 
 
 
 class TestPageFactory():
-	print(PageFactory)
+	def test_example(self):
+		assert 5==5

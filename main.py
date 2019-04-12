@@ -1,14 +1,11 @@
-
-import test.unit.test as test
+from .test.unit import TestPageFactory
 
 
 def main():
 	testRunner()
 
 def testRunner():
-
-	print(dir(test))
-
+	TestPageFactory()
 
 
 main()
