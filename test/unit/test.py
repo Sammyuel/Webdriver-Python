@@ -1,4 +1,6 @@
-class Test():
-	pass
+from core.page import PageFactory 
 
-print("hello")
+
+
+class TestPageFactory():
+	print(PageFactory)

@@ -1,1 +1,1 @@
-from .test2 import *
+from .unit.test import TestPageFactory

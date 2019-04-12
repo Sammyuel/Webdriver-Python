@@ -1,31 +1,19 @@
-import importlib
-import inspect
+
+import test.unit.test as test
 
 
-print("bye")
+def main():
+	testRunner()
 
+def testRunner():
 
-
-def importer():
-	print("what")
-	print("byfefefe")
-	return importlib.import_module('test')
-
-
-
-testfile = importer()
+	print(dir(test))
 
 
 
-
-
-gg = [m[0] for m in inspect.getmembers(testfile, inspect.isclass)]
-
-print(gg)
-
-
-#print(getattr(testfile, gg))
+main()
 
 """
-print("".join(filter(lambda x: eval(x).isclass, dir(testfile))))
+if __name__ == "__main__":
+	main()
 """
