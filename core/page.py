@@ -24,17 +24,13 @@ class PageFactory():
 		for page in self.pages:
 			pass
 
-
-
-
 	"""
 	Imports the pages correspending to the self.app name 
 	"""
-	"""
 	def import_pages(self):
-		imp_path = f".apps.{self.app}.pages"
+		imp_path = ".apps.{}.pages".format(self.app)
 		page_modules = importlib.import_module(imp_path)
 		page_names = [m[0] for m in inspect.getmembers(page_modules, isclass)]
 		page_classes = [getattr(page_modules, page_name) for page_name in page_names]
 		return page_classes
-	"""
+

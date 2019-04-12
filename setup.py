@@ -41,7 +41,9 @@ setup(
     packages=[
         'core',
         'core.appium',
-        
+        'apps',
+        'apps.fibetv',
+        'apps.fibetv.pages',
 
     ],
     license='Apache 2.0',

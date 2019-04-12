@@ -1,7 +1,7 @@
 
 
 
-class Webdriver(appium_connection):
+class Webdriver():
 	def __init__(self,sessionId):
 		self.sessionId = sessionId
 

@@ -1,5 +1,9 @@
 README.md
 setup.py
+apps/__init__.py
+apps/fibetv/__init__.py
+apps/fibetv/pages/__init__.py
+apps/fibetv/pages/samplePage.py
 core/__init__.py
 core/device.py
 core/page.py
