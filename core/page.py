@@ -3,8 +3,8 @@ import inspect
 
 
 class PageFactory():
-	def __init__(self, app_name, device, **kwargs):
-		self.pages = import_pages
+	def __init__(self, pages, app_name, device, **kwargs):
+		self.pages = import_pages(pages)
 		self.app = app_name
 		self.page = pages.HomePage
 		self.pageVisited = [self.page.__name__]
@@ -20,7 +20,6 @@ class PageFactory():
 
 
 	def page_builder(self):
-
 		for page in self.pages:
 			pass
 
@@ -28,12 +27,15 @@ class PageFactory():
 		pass
 
 
+	def import_pages(self, pages):
+		pass
+
 
 
 	"""
 	Imports the pages correspending to the self.app name 
 	"""
-	def import_pages(self):
+	def import_pages_from_location(self):
 		imp_path = ".apps.{}.pages".format(self.app)
 		page_modules = importlib.import_module(imp_path)
 		page_names = [m[0] for m in inspect.getmembers(page_modules, isclass)]

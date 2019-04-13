@@ -2,11 +2,14 @@ README.md
 setup.py
 apps/__init__.py
 apps/fibetv/__init__.py
+apps/fibetv/fibetv_test.py
 apps/fibetv/pages/__init__.py
 apps/fibetv/pages/samplePage.py
+apps/fibetv/pages/sample_page_two.py
 core/__init__.py
 core/device.py
 core/page.py
+core/page_decorators.py
 core/appium/__init__.py
 core/appium/appium_connection.py
 core/appium/webdriver.py
