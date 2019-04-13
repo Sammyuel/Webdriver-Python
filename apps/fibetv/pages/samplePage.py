@@ -17,9 +17,11 @@ def pageMethod5():
 def fibetv():
 	pass
 
-
 def pageMethod6():
 	pass
+
+def goto_home():
+	print("home")
 
 class PageFactory():
 	pass

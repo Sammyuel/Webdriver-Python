@@ -1,23 +1,38 @@
 from python_webdriver.core.page import PageFactory 
-from python_webdriver.apps.fibetv.pages import samplePage
+from python_webdriver.apps.fibetv.pages import samplePage as page
 import importlib
 import inspect
 import unittest
+import pytest
 
 class TestPageFactory():
 
 
-	def setup_method(self):
-		print(dir(samplePage))
-		print("see above")
+	@pytest.fixture
+	def sample_page(self):
+		return page
 
+	@pytest.fixture
+	def page_name(page = 'home'):
+		return page
 
-	def test_example(self):
+	def goto(self, module, page_name):
+		pageVisted = []
+		if hasattr(module, "goto_{}".format(page_name)):
+			page_method = getattr(module, "goto_{}".format(page_name))
+			page_method()
+			pageVisited.append(module.__name__)
+			page = getattr(module, page_name)
+			assert page.__name__ = "HomePage"
+		else:
+			assert False
+
+	def test_example(self, samplePage):
+
 		assert 5==5
 
-	def goto(self, page_name, pages):
-		if hasattr(pages, "goto_{}".format(page_name)):
-			page_method = getattr()
+
+
 	def test_goto(self):
 		print("hello")
 		assert 1==1
@@ -32,17 +47,8 @@ class TestPageFactory():
 	def teardown_method(self):
 		print("look above")
 
-"""
-
-	def goto(self, page_name):
-		if hasattr(self.pages, "goto_{}".format(page_name)):
-			page_method = getattr(self.page, "goto_{}".format(page_name))
-			page_method()
-			self.pageVisited.append(self.page.__name__)
-			self.page = getattr(self.pages, page_name)
-		else:
-			raise Exception("Invalid page name provided to goto method")
-"""
 
 
 
+class PageModule():
+	def module(self):
