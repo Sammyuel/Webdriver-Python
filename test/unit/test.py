@@ -13,23 +13,24 @@ class TestPageFactory():
 		return page
 
 	@pytest.fixture
-	def page_name(page = 'home'):
+	def page_name(self, page = 'home'):
 		return page
 
 	def goto(self, module, page_name):
-		pageVisted = []
+		visited = []
 		if hasattr(module, "goto_{}".format(page_name)):
 			page_method = getattr(module, "goto_{}".format(page_name))
 			page_method()
-			pageVisited.append(module.__name__)
-			page = getattr(module, page_name)
-			assert page.__name__ = "HomePage"
+			visited.append(module.__name__)
+			return visited, page_method
 		else:
-			assert False
+			return False
 
-	def test_example(self, samplePage):
-
-		assert 5==5
+	def test_example(self, sample_page, page_name):
+		visited, page = self.goto(sample_page, page_name)
+		assert page.__name__ == "goto_home"
+		assert callable(page)
+		assert len(visited) == 1
 
 
 
@@ -45,10 +46,12 @@ class TestPageFactory():
 		return page_classes
 
 	def teardown_method(self):
-		print("look above")
+		pass
 
 
 
 
 class PageModule():
 	def module(self):
+		pass
+	def goto(module, page_name):
