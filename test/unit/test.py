@@ -26,17 +26,14 @@ class TestPageFactory():
 		else:
 			return False
 
-	def test_example(self, sample_page, page_name):
+	def test_goto(self, sample_page, page_name):
 		visited, page = self.goto(sample_page, page_name)
+		print(visited[0])
+		print("see above")
+
 		assert page.__name__ == "goto_home"
 		assert callable(page)
-		assert len(visited) == 1
 
-
-
-	def test_goto(self):
-		print("hello")
-		assert 1==1
 
 	def import_pages(self):
 		imp_path = ".apps.{}.pages".format(self.app)
@@ -55,3 +52,5 @@ class PageModule():
 	def module(self):
 		pass
 	def goto(module, page_name):
+		visited = []
+

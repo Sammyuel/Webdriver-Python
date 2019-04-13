@@ -24,6 +24,12 @@ class PageFactory():
 		for page in self.pages:
 			pass
 
+	def class_generator(self):
+		pass
+
+
+
+
 	"""
 	Imports the pages correspending to the self.app name 
 	"""
