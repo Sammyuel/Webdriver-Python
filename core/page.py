@@ -23,12 +23,28 @@ class PageFactory():
 		for page in self.pages:
 			pass
 
-	def class_generator(self):
+
+	def import_page_modules(self, modules):
+		return [m[0] for m in inspect.getmembers(modules, ismodule)]
+
+	def import_page_classes(self, module):
+		return [m[0] for m in inspect.getmembers(module, isclass)]
+
+	def import_page_methods(self, module):
+		return [m[0] for m in inspect.getmembers(module, ismethod)]
+
+
+	def page_class_generator(self, page):
+		page_classes = [m[0] for m in inspect.getmembers(page, isclass)]
+		page_class = type(page.__name__, object, )
 		pass
 
 
-	def import_pages(self, pages):
-		pass
+
+
+
+	def import_
+
 
 
 

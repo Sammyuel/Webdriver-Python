@@ -1,0 +1,2 @@
+class Ios():
+	pass

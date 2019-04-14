@@ -31,7 +31,7 @@ class TestPageFactory():
 			return False
 
 	def test_goto(self, sample_page, page_name):
-		print(dir(fibetv_test))
+		print(inspect.ismodule(fibetv_test.HomePage))
 		print("see above")
 		visited, page = self.goto(sample_page, page_name)
 		#print(visited[0])
