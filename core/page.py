@@ -34,12 +34,9 @@ class PageFactory():
 		return [m[0] for m in inspect.getmembers(module, ismethod)]
 
 
-	def page_class_generator(self, page):
-		page_classes = [m[0] for m in inspect.getmembers(page, isclass)]
-		page_class = type(page.__name__, object, )
-		pass
-
-
+	def page_class_generator(self, page_name, methods):
+		page_class = type(page.__name__, object, {method.__name__:method for method in methods})
+		return page_class
 
 
 
