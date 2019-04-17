@@ -1,0 +1,6 @@
+Todo list:
+- Dynamic inheritance. 
+Two options:
+	Function that takes in object class as parameter
+	Use the type() method to create classes with the correct inheritance
+	

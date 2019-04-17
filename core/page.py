@@ -13,7 +13,7 @@ class PageFactory():
 	def goto(self, page_name, *args, **kwargs):
 		if hasattr(self.pages, "goto_{}".format(page_name)):
 			page_method = getattr(self.page, "goto_{}".format(page_name))
-			page_method()
+			self.page_method()
 			self.pageVisited.append(self.page.__name__)
 			new_page = self.page_objects[page_name] if page_name in page_objects else self.page_classes[page_name](*args, **kwargs)
 			self.page = new_page
@@ -23,11 +23,21 @@ class PageFactory():
 
 
 	def page_builder(self, modules):
-		page_classes = {}
+		pages = {}
 		modules = import_page_modules(modules)
 		for module in modules:
-			
+			page = self.page_classes(module)
 
+
+
+	def inheritance_order(self, classes):
+		pass
+
+		
+	def createClass(self, base, module):
+		main_class = type(module.__name__, base, {})
+		return main_class
+			
 
 	def import_page_modules(self, modules):
 		return {m[0].__name__: m[0] for m in inspect.getmembers(modulesm ismodule)}
@@ -40,7 +50,6 @@ class PageFactory():
 		if page_class and page_class.__class__.__name__ not in page_classes: 
 			page_classes[page_class.__class__.__name__] = page_class
 		return page_classes
-
 
 
 	def set_page_objects(self, pages):
