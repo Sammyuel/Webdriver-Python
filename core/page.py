@@ -3,7 +3,8 @@ import inspect
 
 
 class PageFactory():
-	def __init__(self, pages, app_name, device, **kwargs):
+	def __init__(self, device, pages, app_name, device, **kwargs):
+		self.device = device
 		self.page_classes = page_builder(pages)
 		self.page_objects = {}
 		self.app = app_name
@@ -27,16 +28,32 @@ class PageFactory():
 		modules = import_page_modules(modules)
 		for module in modules:
 			page = self.page_classes(module)
+			ordered_page = inerheitance_chance(page)
 
 
 
-	def inheritance_order(self, classes):
+
+	def inheritance_chain(self, class_names):
+		order = [self.device.application_name, self.device.platform_name, self.device.vendor_name]
+		result = []
+		for class_name in class_names:
+			index = 
+
+	def inject_comparitors(self, class_name):
 		pass
 
-		
-	def createClass(self, base, module):
+	def get_class_name(self, class_name):
+		pass
+
+	def get_class_version(self, class_name):
+		pass
+
+
+
+	def create_class_order(self, base, module):
 		main_class = type(module.__name__, base, {})
 		return main_class
+
 			
 
 	def import_page_modules(self, modules):
