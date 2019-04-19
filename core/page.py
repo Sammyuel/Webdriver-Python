@@ -1,5 +1,6 @@
 import importlib
 import inspect
+import re
 
 
 class PageFactory():
@@ -10,6 +11,7 @@ class PageFactory():
 		self.app = app_name
 		self.page = pages.HomePage
 		self.pageVisited = [self.page.__name__]
+		self.inheritance_order = [self.device.application_name, self.device.platform_name, self.device.vendor_name]
 
 	def goto(self, page_name, *args, **kwargs):
 		if hasattr(self.pages, "goto_{}".format(page_name)):
@@ -39,8 +41,34 @@ class PageFactory():
 		for class_name in class_names:
 			index = 
 
-	def inject_comparitors(self, class_name):
+	def modify_page_classes(self, page_classes):
+
 		pass
+
+	def max_range(self, class_name):
+		pass
+
+	def min_range(self, class_name):
+		pass
+
+	def parse_version_value(self, class_name):
+		version = re.search("(?<=_)[0-9|_]*", class_name).group(0)
+		version = int(version.replace('_', ''))
+		return version 
+
+
+
+	def inject_comparitors(self, class_name):
+		def __eq__(self, other):
+			order = self.inheritance_order
+			for i, elem in enumerate(order):
+				if class_name.lower() in elem:
+					self.index = i
+			return self.index == other.index
+
+		def __gt__(self, other):
+			pass
+
 
 	def get_class_name(self, class_name):
 		pass
