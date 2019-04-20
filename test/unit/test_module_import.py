@@ -1,3 +1,4 @@
+"""
 from python_webdriver.core.page import PageFactory 
 from python_webdriver.apps.fibetv.pages import samplePage as page
 from python_webdriver.apps.fibetv import fibetv_test
@@ -60,3 +61,4 @@ class PageModule():
 	def goto(module, page_name):
 		visited = []
 
+"""

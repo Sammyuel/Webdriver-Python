@@ -4,13 +4,13 @@ import re
 
 
 class PageFactory():
-	def __init__(self, device, pages, app_name, device, **kwargs):
+	def __init__(self, device, pages, app_name, **kwargs):
 		self.device = device
-		self.page_classes = page_builder(pages)
+		self.page_classes = pages
 		self.page_objects = {}
 		self.app = app_name
-		self.page = pages.HomePage
-		self.pageVisited = [self.page.__name__]
+		self.page = 'Homepage'
+		self.pageVisited = [self.page]
 		self.inheritance_order = [self.device.application_name, self.device.platform_name, self.device.vendor_name]
 
 	def goto(self, page_name, *args, **kwargs):
@@ -52,13 +52,12 @@ class PageFactory():
 
 
 	def page_classes(self, module):
-		methods = [m[0] for m in inspect.getmembers(module, ismethod)]
-		page_classes = {m[0].__name__: m[0] for m in inspect.getmembers(module, isclass)}
-		page_class = type(module.__name__, () , {method.__name__:method for method in methods}) if module.__name__ is in page_classes else None
+		methods = [m[1] for m in inspect.getmembers(module, inspect.isfunction)]
+		page_classes = {m[0]: m[1] for m in inspect.getmembers(module, inspect.isclass)}
+		page_class = type(module.__name__, () , {method.__name__:method for method in methods if module.__name__ in page_classes})
 		if page_class and page_class.__class__.__name__ not in page_classes: 
 			page_classes[page_class.__class__.__name__] = page_class
 		return page_classes
-
 
 	def modify_valid_classes(self, page_classes):
 		valid_names = [self.device.application_name, self.device.platform_name, self.device.vendor_name]
@@ -96,7 +95,7 @@ class PageFactory():
 			
 
 	def import_page_modules(self, modules):
-		return {m[0].__name__: m[0] for m in inspect.getmembers(modulesm ismodule)}
+		return {m[0].__name__: m[0] for m in inspect.getmembers(modules, ismodule)}
 
 
 	def set_page_objects(self, pages):
@@ -108,7 +107,6 @@ class PageFactory():
 	def get_page_classes(self, page_name):
 		methods = import_page_methods(page_name)
 		page_classes = import_page_classes(page_name)
-		if 
 
 		page_class = type(page.__name__, object, {method.__name__:method for method in methods})
 		return page_class
