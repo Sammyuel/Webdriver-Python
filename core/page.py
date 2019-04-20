@@ -33,29 +33,43 @@ class PageFactory():
 			ordered_page = inerheitance_chance(page)
 
 
-
-
-	def inheritance_chain(self, class_names):
+	def modify_inheritance_order(self, page_classes):
 		order = [self.device.application_name, self.device.platform_name, self.device.vendor_name]
-		result = []
-		for class_name in class_names:
-			index = 
+		start_ptr = 0
+		end_ptr = len(class_names) - 1
+		i = 0
+		while i < len(class_names):
+			class_name = get_class_name(class_names[i])
+			if class_name == order[0] and start_ptr != i:
+				page_classes[start_ptr], page_classes[i] = page_classes[i], page_classes[start_ptr]
+				start_ptr += 1
+			elif class_name == order[-1] and end_ptr != i:
+				page_classes[i], page_classes[end_ptr] = page_classes[end_ptr], page_classes[i]
+				end_ptr -= 1
+				i -= 1
+			i += 1
+		return page_classes
 
-	def modify_page_classes(self, page_classes):
 
-		pass
+	def page_classes(self, module):
+		methods = [m[0] for m in inspect.getmembers(module, ismethod)]
+		page_classes = {m[0].__name__: m[0] for m in inspect.getmembers(module, isclass)}
+		page_class = type(module.__name__, () , {method.__name__:method for method in methods}) if module.__name__ is in page_classes else None
+		if page_class and page_class.__class__.__name__ not in page_classes: 
+			page_classes[page_class.__class__.__name__] = page_class
+		return page_classes
 
-	def max_range(self, class_name):
-		pass
 
-	def min_range(self, class_name):
-		pass
+	def modify_valid_classes(self, page_classes):
+		valid_names = [self.device.application_name, self.device.platform_name, self.device.vendor_name]
+		valid_classes = [page_class for page_class in page_classes if get_class_name(page_class) in valid_names and parse_version_value(page_class.__class__.__name__) <= getattr(self.device, page_class.version)]
+		return valid_classes
+
 
 	def parse_version_value(self, class_name):
 		version = re.search("(?<=_)[0-9|_]*", class_name).group(0)
 		version = int(version.replace('_', ''))
 		return version 
-
 
 
 	def inject_comparitors(self, class_name):
@@ -71,11 +85,8 @@ class PageFactory():
 
 
 	def get_class_name(self, class_name):
-		pass
-
-	def get_class_version(self, class_name):
-		pass
-
+		name = str(re.search("[a-z]*(?=_)", class_name).group(0).replace("_", ""))
+		return name
 
 
 	def create_class_order(self, base, module):
@@ -86,15 +97,6 @@ class PageFactory():
 
 	def import_page_modules(self, modules):
 		return {m[0].__name__: m[0] for m in inspect.getmembers(modulesm ismodule)}
-
-
-	def page_classes(self, module):
-		methods = [m[0] for m in inspect.getmembers(module, ismethod)]
-		page_classes = {m[0].__name__: m[0] for m in inspect.getmembers(module, isclass)}
-		page_class = type(module.__name__, () , {method.__name__:method for method in methods}) if module.__name__ is in page_classes else None
-		if page_class and page_class.__class__.__name__ not in page_classes: 
-			page_classes[page_class.__class__.__name__] = page_class
-		return page_classes
 
 
 	def set_page_objects(self, pages):
