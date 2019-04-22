@@ -1,5 +1,6 @@
 import importlib
 import inspect
+import python_webdriver.apps.fibetv.pages as pages
 import re
 
 
@@ -50,13 +51,20 @@ class PageFactory():
 			i += 1
 		return page_classes
 
+	def module_to_class_list(self):
+		pass
 
-	def page_classes(self, module):
-		methods = [m[1] for m in inspect.getmembers(module, inspect.isfunction)]
-		page_classes = {m[0]: m[1] for m in inspect.getmembers(module, inspect.isclass)}
-		page_class = type(module.__name__, () , {method.__name__:method for method in methods if module.__name__ in page_classes})
-		if page_class and page_class.__class__.__name__ not in page_classes: 
-			page_classes[page_class.__class__.__name__] = page_class
+
+	def module_to_dic(self):
+		modules = {name:page for name, page in inspect.getmembers(pages, inspect.ismodule)}
+		return modules
+
+	def generate_page_classes(self, mod):
+		methods = {name:method for name, method in inspect.getmembers(mod, inspect.isfunction)}
+		page_classes = {name:page for name, page in inspect.getmembers(mod, inspect.isclass)}		
+		page_class = type(re.search('(?=.)[\w]*$', mod.__name__).group(0), () , {key:methods[key] for key in methods})
+		if page_class and page_class.__name__ not in page_classes: 
+			page_classes[page_class.__name__] = page_class
 		return page_classes
 
 	def modify_valid_classes(self, page_classes):

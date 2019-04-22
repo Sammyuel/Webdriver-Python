@@ -1,10 +1,11 @@
 from .module_examples import page_classes 
 from python_webdriver.core.page import PageFactory 
-from python_webdriver.apps.fibetv.pages import samplePage as page
+import python_webdriver.apps.fibetv.pages as pages
 import importlib
 import inspect
 import unittest
 import pytest
+import re
 
 
 class TestPageClasses():
@@ -15,14 +16,13 @@ class TestPageClasses():
 		page_factory = PageFactory(device, pages, "fibetv")
 		return page_factory
 
+	def convert_modules_to_classes(self, module):
+		return module
+
 	def test_page_classes(self, page_factory):
-		print(page_classes)
-		assert True 
-
-
-
-
-
+		print("see below")
+		print(page_factory.generate_page_classes(getattr(pages, 'samplePage')))
+		print("see above")
 
 
 
