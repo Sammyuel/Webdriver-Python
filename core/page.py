@@ -40,7 +40,6 @@ class PageFactory():
 		start_ptr = 0
 		end_ptr = len(class_names) - 1
 		i = 0
-		print(class_names)
 		while i < len(class_names):
 			class_name = str(re.search('[a-zA-Z0-9]*(?=_)',class_names[i]).group(0))
 			if class_name == order[0] and start_ptr != i:
@@ -51,8 +50,6 @@ class PageFactory():
 				end_ptr -= 1
 				i -= 1
 			i += 1
-		print(class_names)
-		print("see above")
 		return [page_classes[page_class] for page_class in class_names]
 
 	def get_class_name(self, class_name):

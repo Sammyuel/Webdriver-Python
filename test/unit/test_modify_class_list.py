@@ -19,14 +19,12 @@ class TestPageClasses():
 	def convert_modules_to_classes(self, module):
 		return module
 
-	def test_page_classes(self, page_factory):
-		print("see below")
+	def test_generate_classes(self, page_factory):
 		classes = page_factory.generate_page_classes(getattr(pages, 'samplePage'))
-		print(classes)
-		print("\n\n\n\n\n\n")
+		assert(isinstance(classes, dict))
 		classes = page_factory.modify_inheritance_order(classes)
-		print(classes)
-		print("see above")
+		assert(isinstance(classes, list))
+		assert((re.search('[a-zA-Z0-9]*(?=_)',classes[0].__name__).group(0)) == 'Fibetv')
 
 
 
