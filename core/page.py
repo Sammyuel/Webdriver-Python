@@ -35,7 +35,19 @@ class PageFactory():
 
 
 	def page_builder(self, mod):
-		pass
+		modules = self.module_to_dic(mod)
+
+		pages = {}
+		for module in modules:
+			page_classes = self.get_page_classes(modules[module])
+			modified_page_classes = self.modify_valid_classes(page_classes)
+			ordered_pages = self.modify_inheritance_order(modified_page_classes)
+			ordered_pages.append(self.include_classes_methods(module, modules[module]))
+			base_class = self.create_base_class(module, ordered_pages)
+			pages[base_class.__name__] = base_class
+		self.pages = pages
+		return pages
+
 
 
 	def modify_inheritance_order(self, page_classes):
@@ -64,19 +76,16 @@ class PageFactory():
 		return modules
 
 	def create_base_class(self, mod, page_classes):
-		page_classes.reverse()
-		base_class = type(re.search('(?=.)[[a-zA-Z0-9]]*$', mod.__name__).group(0), tuple(page_classes) , {})
-		self.page_classes[mod.__name__] = base_class
+		base_class = type(mod, tuple(page_classes) , {})
+		return base_class
 
 	def get_page_classes(self, mod):
-		methods = {name:method for name, method in inspect.getmembers(mod, inspect.isfunction)}
 		page_classes = {name:page for name, page in inspect.getmembers(mod, inspect.isclass)}	
 		return page_classes
 
-	def get_classes_methods(self, mod, page_classes):
+	def include_classes_methods(self, name, mod):
+		methods = {name:method for name, method in inspect.getmembers(mod, inspect.isfunction)}
 		main_class = type('Main', (), {key:methods[key] for key in methods})
-		if main_class and main_class.__name__ not in page_classes: 
-			page_classes[main_class.__name__] = main_class
 		return main_class
 
 	def get_class_name(self, class_name):
@@ -86,7 +95,7 @@ class PageFactory():
 	def modify_valid_classes(self, page_classes):
 		valid_names = [self.device.application_name, self.device.platform_name, self.device.vendor_name]
 		valid_versions = [self.device.application_version, self.device.platform_version, self.device.vendor_version]
-		valid_classes = []
+		valid_classes = {}
 		index = 0 
 		for page_class in page_classes:
 			class_name = self.get_class_name(page_class)
@@ -96,9 +105,8 @@ class PageFactory():
 						index = i 
 						break
 				if self.parse_version_value(page_class) <= valid_versions[index]:
-					valid_classes.append(page_class)
+					valid_classes[page_class] = page_classes[page_class]
 		return valid_classes
-
 
 
 	def parse_version_value(self, class_name):

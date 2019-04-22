@@ -24,19 +24,17 @@ def goto_home():
 	print("home")
 
 class Android_1():
-	pass
+	def testMethodOne(self):
+		print("1")
 
 class Android_6():
-	def __dir__(self):
-		return ["one","two","three"]
-	def testMethodOne():
+	def testMethodOne(self):
 		print("1")
-	def testMethodTwo():
+	def testMethodTwo(self):
 		print("2")
-	def testMethodThree():
+	def testMethodThree(self):
 		print("3")
-	class SubClass():
-		pass
+
 
 class Fibetv_0():
 	def testMethodOne():

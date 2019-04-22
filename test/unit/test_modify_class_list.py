@@ -16,13 +16,15 @@ class TestPageClasses():
 		page_factory = PageFactory(device, pages, "fibetv")
 		return page_factory
 
-	def convert_modules_to_classes(self, module):
-		return module
+	def test_module_to_dic(self, page_factory):
+		assert(page_factory.module_to_dic(pages))
+
 
 	def test_generate_classes(self, page_factory):
 		classes = page_factory.get_page_classes(getattr(pages, 'samplePage'))
 		assert(isinstance(classes, dict))
 		classes = page_factory.modify_inheritance_order(classes)
+
 		assert(isinstance(classes, list))
 		assert((re.search('[a-zA-Z0-9]*(?=_)',classes[0].__name__).group(0)) == 'Fibetv')
 
@@ -38,6 +40,11 @@ class TestPageClasses():
 		assert('samplePage' in submodules)
 		assert('sample_page_two' in submodules)
 
+
+	def test_page_builder(self, page_factory):
+		test = page_factory.page_builder(pages)
+		t = test['samplePage']
+		print(dir(t))
 
 
 
