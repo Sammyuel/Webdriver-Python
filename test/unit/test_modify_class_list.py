@@ -21,7 +21,11 @@ class TestPageClasses():
 
 	def test_page_classes(self, page_factory):
 		print("see below")
-		print(page_factory.generate_page_classes(getattr(pages, 'samplePage')))
+		classes = page_factory.generate_page_classes(getattr(pages, 'samplePage'))
+		print(classes)
+		print("\n\n\n\n\n\n")
+		classes = page_factory.modify_inheritance_order(classes)
+		print(classes)
 		print("see above")
 
 
@@ -36,9 +40,9 @@ class TestPageClasses():
 
 class Device():
 	def __init__(self):
-		self.application_name = "fibe"
+		self.application_name = "Fibetv"
 		self.application_version = "0"
-		self.platform_name = "android"
+		self.platform_name = "Android"
 		self.platform_version = "0"
-		self.vendor_name = "samsung"
+		self.vendor_name = "Samsung"
 		self.vendor_Version = "0"

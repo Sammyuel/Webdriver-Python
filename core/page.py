@@ -36,20 +36,28 @@ class PageFactory():
 
 	def modify_inheritance_order(self, page_classes):
 		order = [self.device.application_name, self.device.platform_name, self.device.vendor_name]
+		class_names = list(page_classes.keys())
 		start_ptr = 0
 		end_ptr = len(class_names) - 1
 		i = 0
+		print(class_names)
 		while i < len(class_names):
-			class_name = get_class_name(class_names[i])
+			class_name = str(re.search('[a-zA-Z0-9]*(?=_)',class_names[i]).group(0))
 			if class_name == order[0] and start_ptr != i:
-				page_classes[start_ptr], page_classes[i] = page_classes[i], page_classes[start_ptr]
+				class_names[start_ptr], class_names[i] = class_names[i], class_names[start_ptr]
 				start_ptr += 1
 			elif class_name == order[-1] and end_ptr != i:
-				page_classes[i], page_classes[end_ptr] = page_classes[end_ptr], page_classes[i]
+				class_names[i], class_anmes[end_ptr] = class_names[end_ptr], class_names[i]
 				end_ptr -= 1
 				i -= 1
 			i += 1
-		return page_classes
+		print(class_names)
+		print("see above")
+		return [page_classes[page_class] for page_class in class_names]
+
+	def get_class_name(self, class_name):
+		name = str(re.search("[a-z]*(?=_)", class_name).group(0).replace("_", ""))
+		return name
 
 	def module_to_class_list(self):
 		pass
@@ -59,12 +67,16 @@ class PageFactory():
 		modules = {name:page for name, page in inspect.getmembers(pages, inspect.ismodule)}
 		return modules
 
+	def create_base_class(self):
+		pass
+
 	def generate_page_classes(self, mod):
 		methods = {name:method for name, method in inspect.getmembers(mod, inspect.isfunction)}
-		page_classes = {name:page for name, page in inspect.getmembers(mod, inspect.isclass)}		
-		page_class = type(re.search('(?=.)[\w]*$', mod.__name__).group(0), () , {key:methods[key] for key in methods})
-		if page_class and page_class.__name__ not in page_classes: 
-			page_classes[page_class.__name__] = page_class
+		page_classes = {name:page for name, page in inspect.getmembers(mod, inspect.isclass)}	
+		return page_classes	
+		main_class = type(re.search('(?=.)[[a-zA-Z0-9]]*$', mod.__name__).group(0), () , {key:methods[key] for key in methods})
+		if main_class and main_class.__name__ not in page_classes: 
+			page_classes[main_class.__name__] = main_class
 		return page_classes
 
 	def modify_valid_classes(self, page_classes):
@@ -91,9 +103,7 @@ class PageFactory():
 			pass
 
 
-	def get_class_name(self, class_name):
-		name = str(re.search("[a-z]*(?=_)", class_name).group(0).replace("_", ""))
-		return name
+
 
 
 	def create_class_order(self, base, module):

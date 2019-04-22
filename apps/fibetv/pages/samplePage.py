@@ -23,10 +23,10 @@ def pageMethod6():
 def goto_home():
 	print("home")
 
-class PageFactory():
+class Android_1():
 	pass
 
-class TestPage():
+class Android_2():
 	def __dir__(self):
 		return ["one","two","three"]
 	def testMethodOne():
@@ -38,18 +38,18 @@ class TestPage():
 	class SubClass():
 		pass
 
-class TestPageAppName():
+class Fibetv_0():
 	def testMethodOne():
 		print("11")
 	def testMethodTwo():
 		print("22")
 	def testMethodThree():
 		print("33")
-class Abc():
+class Fibetv_1():
 	pass
 
 
-def pageFactory():
+def Samsung_2():
 	return TestPageAppName(TestPage(PageFactory))
 
 
