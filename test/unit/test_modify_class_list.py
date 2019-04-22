@@ -20,18 +20,23 @@ class TestPageClasses():
 		return module
 
 	def test_generate_classes(self, page_factory):
-		classes = page_factory.generate_page_classes(getattr(pages, 'samplePage'))
+		classes = page_factory.get_page_classes(getattr(pages, 'samplePage'))
 		assert(isinstance(classes, dict))
 		classes = page_factory.modify_inheritance_order(classes)
 		assert(isinstance(classes, list))
 		assert((re.search('[a-zA-Z0-9]*(?=_)',classes[0].__name__).group(0)) == 'Fibetv')
 
+	def test_modify_classes(self, page_factory):
+		classes = page_factory.get_page_classes(getattr(pages, 'samplePage'))
+		modified_classes = page_factory.modify_valid_classes(classes)
+		assert('Android_6' in classes)
+		assert('Android_6' not in modified_classes)
 
 
-
-
-
-
+	def test_get_submodules(self, page_factory):
+		submodules = page_factory.module_to_dic(pages)
+		assert('samplePage' in submodules)
+		assert('sample_page_two' in submodules)
 
 
 
@@ -39,8 +44,8 @@ class TestPageClasses():
 class Device():
 	def __init__(self):
 		self.application_name = "Fibetv"
-		self.application_version = "0"
+		self.application_version = 5
 		self.platform_name = "Android"
-		self.platform_version = "0"
+		self.platform_version = 5
 		self.vendor_name = "Samsung"
-		self.vendor_Version = "0"
+		self.vendor_version = 5

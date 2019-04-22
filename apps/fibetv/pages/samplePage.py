@@ -26,7 +26,7 @@ def goto_home():
 class Android_1():
 	pass
 
-class Android_2():
+class Android_6():
 	def __dir__(self):
 		return ["one","two","three"]
 	def testMethodOne():

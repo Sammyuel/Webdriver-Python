@@ -34,9 +34,14 @@ class PageFactory():
 			ordered_page = inerheitance_chance(page)
 
 
+	def page_builder(self, mod):
+		pass
+
+
 	def modify_inheritance_order(self, page_classes):
 		order = [self.device.application_name, self.device.platform_name, self.device.vendor_name]
 		class_names = list(page_classes.keys())
+
 		start_ptr = 0
 		end_ptr = len(class_names) - 1
 		i = 0
@@ -52,34 +57,48 @@ class PageFactory():
 			i += 1
 		return [page_classes[page_class] for page_class in class_names]
 
-	def get_class_name(self, class_name):
-		name = str(re.search("[a-z]*(?=_)", class_name).group(0).replace("_", ""))
-		return name
-
-	def module_to_class_list(self):
-		pass
 
 
-	def module_to_dic(self):
-		modules = {name:page for name, page in inspect.getmembers(pages, inspect.ismodule)}
+	def module_to_dic(self, module):
+		modules = {name:page for name, page in inspect.getmembers(module, inspect.ismodule)}
 		return modules
 
-	def create_base_class(self):
-		pass
+	def create_base_class(self, mod, page_classes):
+		page_classes.reverse()
+		base_class = type(re.search('(?=.)[[a-zA-Z0-9]]*$', mod.__name__).group(0), tuple(page_classes) , {})
+		self.page_classes[mod.__name__] = base_class
 
-	def generate_page_classes(self, mod):
+	def get_page_classes(self, mod):
 		methods = {name:method for name, method in inspect.getmembers(mod, inspect.isfunction)}
 		page_classes = {name:page for name, page in inspect.getmembers(mod, inspect.isclass)}	
-		return page_classes	
-		main_class = type(re.search('(?=.)[[a-zA-Z0-9]]*$', mod.__name__).group(0), () , {key:methods[key] for key in methods})
+		return page_classes
+
+	def get_classes_methods(self, mod, page_classes):
+		main_class = type('Main', (), {key:methods[key] for key in methods})
 		if main_class and main_class.__name__ not in page_classes: 
 			page_classes[main_class.__name__] = main_class
-		return page_classes
+		return main_class
+
+	def get_class_name(self, class_name):
+		name = str(re.search("[A-Za-z0-9]*(?=_)", class_name).group(0).replace("_", ""))
+		return name
 
 	def modify_valid_classes(self, page_classes):
 		valid_names = [self.device.application_name, self.device.platform_name, self.device.vendor_name]
-		valid_classes = [page_class for page_class in page_classes if get_class_name(page_class) in valid_names and parse_version_value(page_class.__class__.__name__) <= getattr(self.device, page_class.version)]
+		valid_versions = [self.device.application_version, self.device.platform_version, self.device.vendor_version]
+		valid_classes = []
+		index = 0 
+		for page_class in page_classes:
+			class_name = self.get_class_name(page_class)
+			if class_name in valid_names:
+				for i, names in enumerate(valid_names):
+					if class_name in names:
+						index = i 
+						break
+				if self.parse_version_value(page_class) <= valid_versions[index]:
+					valid_classes.append(page_class)
 		return valid_classes
+
 
 
 	def parse_version_value(self, class_name):
@@ -117,14 +136,6 @@ class PageFactory():
 		page_objects = {key:page() for key,page in pages.items()}
 		return page_objects
 
-
-
-	def get_page_classes(self, page_name):
-		methods = import_page_methods(page_name)
-		page_classes = import_page_classes(page_name)
-
-		page_class = type(page.__name__, object, {method.__name__:method for method in methods})
-		return page_class
 
 
 
