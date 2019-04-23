@@ -6,3 +6,6 @@ class Device():
 		self.platform_version = "0"
 		self.vendor_name = "samsung"
 		self.vendor_Version = "0"
+
+	def start_device(self):
+		pass

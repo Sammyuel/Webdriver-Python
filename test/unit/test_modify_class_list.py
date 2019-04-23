@@ -42,9 +42,14 @@ class TestPageClasses():
 
 
 	def test_page_builder(self, page_factory):
-		test = page_factory.page_builder(pages)
-		t = test['samplePage']
-		print(dir(t))
+		page_classes = page_factory.page_builder(pages)
+		assert('samplePage' in page_classes)
+
+	def test_goto(self, page_factory):
+		class_modules = page_factory.page_builder(pages)
+		page_factory.current_page = class_modules['samplePage']()
+		page_factory.goto('sample_page_two')
+		assert('sample_page_two' in page_factory.page_objects)
 
 
 

@@ -1,4 +1,12 @@
 
+def goto_samplePage(self):
+	print("hello")
+
+def goto_sample_page_two(self):
+	print("bye")
+	
+
+
 def pageMethod1():
 	pass
 
