@@ -1,0 +1,2 @@
+class Ios(Appium):
+	pass

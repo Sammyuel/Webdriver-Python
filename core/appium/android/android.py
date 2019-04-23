@@ -1,2 +1,0 @@
-class Android():
-	pass
