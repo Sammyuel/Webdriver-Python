@@ -7,15 +7,24 @@ class Appium():
 		pass
 
 
-	def get_session_ids(self):
+	def _get_session_ids(self):
 		r  = requests.get(self.sessions_url)
 		body = dict(r.json())
+		#values = body['value']
+		#ids = [value['id'] for value in values]
 		return body
+
+	def confirm_sessions(self):
+		ids = self._get_session_ids()
+		if len(ids) == 0:
+			raise Exception("No session ids found")
+		else:
+			return ids
 
 
 example = Appium(5)
 
 body = example.get_session_ids()
 
-print(type(body))
+print(body)
 
